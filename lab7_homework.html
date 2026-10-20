@@ -143,18 +143,19 @@
       <a href="https://jl1652.github.io/lab7/query_task.html" target="_blank" rel="noopener noreferrer">Query Task</a>
     </div>
   </div>
-
+  <!-- This is the query -->
   <div class="esri-widget" id="optionsDiv">
     <h2>2016 Bigfoot Entrants</h2>
     <select class="esri-widget" id="attSelect">
       <option value="Age" selected>Age</option>
-
+  <!-- the second part that specifies greater or less than-->
     </select>
     <select class="esri-widget" id="signSelect">
       <option value="&gt;">is greater than</option>
       <option value="&lt;">is less than</option>
       <option value="=">equals</option>
     </select>
+      <!-- allows the user to select the number-->
     <select class="esri-widget" id="valSelect">
       <option value="10">10</option>
       <option value="20">20</option>
@@ -171,16 +172,14 @@
 
   <div id="copyright">
     <script>
-//Below creates a variable called today that houses the date
+//This code was taken from a previous lab, this section helps build the copyright at the bottom
       var today = new Date();
-//Using the today variable below, we get the fll year and assign it to a variable called year
       var year = today.getFullYear();
-//Spits out the copyright symbol as well as the year variable from above
       document.writeln("Copyright &copy; " + year);
     </script>
   </div>
 
-  <!-- Main map script is last so every element above already exists -->
+  <!--this is the tool set that we are using to build our map, many of these were commented out because they were crashing the map-->
   <script>
     require(
       [
@@ -192,18 +191,19 @@
         //"esri/layers/MapImageLayer",
         "esri/widgets/BasemapGallery",
         "esri/layers/GraphicsLayer"
-        //"esri/tasks/QueryTask",          (removed in newer ArcGIS versions, replaced by layer.queryFeatures)
-        //"esri/tasks/support/Query",      (removed in newer ArcGIS versions)
-        //"dojo/_base/array",              (Dojo no longer included)
+        //"esri/tasks/QueryTask",
+        //"esri/tasks/support/Query",
+        //"dojo/_base/array",
         //"dojo/dom",
         //"dojo/on",
         //"dojo/domReady!"
       ],
+      //calls the elements that we are using
       function (Map, MapView, FeatureLayer, FeatureTable, BasemapGallery,
                 GraphicsLayer) {
-
+// this is tht bigfoot dataset that we are using, found this on the esri website specified in the lab here: https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/
         var popUrl = "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/2016BigfootEntrants/FeatureServer/0";
-
+// these below are different various fields used in the attribute table for the bigfoot ultramarathon dataset
         var popupTemplate = {
           title: "{First} {Last}",
           content:
@@ -214,7 +214,7 @@
             "<br><b>Gender:</b> {Gender}" +
             "<br><b>Time:</b> {Time}"
         };
-
+        //READ: this below was commented out as was not needed in this version, i did NOT want to delete it in case I needed it
         //  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         //    attribution: 'Tiles &copy; Esri'
         //}).addTo(map);
@@ -231,7 +231,7 @@
         //    });
         //  }
         //}).addTo(map);
-
+// loads the bigfoto data
         var BigfootLayer = new FeatureLayer({
           url: popUrl,
           renderer: {
@@ -249,22 +249,22 @@
           outFields: ["*"],
           opacity: 0.6
         });
-
+// laods a default basemap, this was used in a previous lab
         var map = new Map({
           basemap: "oceans",
           layers: [BigfootLayer]
         });
-
+//draws map, centerpoint and scale specified
         var view = new MapView({
           container: "viewDiv",
           map: map,
           zoom: 3,
           center: [-100, 40]
         });
-
+// adds basemap toggle, i know 2 widgits weren't asked for but I like this feature
         var basemapGallery = new BasemapGallery({ view: view });
         view.ui.add(basemapGallery, { position: "bottom-left" });
-
+// toggles query
         view.when(function () {
           view.ui.add("optionsDiv", "bottom-right");
           document.getElementById("doBtn").addEventListener("click", doQuery);
@@ -272,7 +272,8 @@
           //Uses Bigfoot layer
           BigfootLayer.title = "2016 Bigfoot Entrants";
           //This code below was taken and recycled from: https://developers.arcgis.com/javascript/latest/sample-code/widgets-featuretable-map/
-          // Create the feature table
+          // The comments below were kept from ESRI, with very slight modifications
+          //Create the feature table
           const featureTable = new FeatureTable({
             view: view, // Required for feature highlight to work
             layer: BigfootLayer,
@@ -293,6 +294,7 @@
                 // Takes an array of FieldColumnTemplate and GroupColumnTemplate
                 {
                   // Autocast to FieldColumnTemplate
+                  // This portion was modified to fit the attributes in our feature class
                   type: "field",
                   fieldName: "Place",
                   label: "Place",
@@ -310,11 +312,11 @@
             container: "tableDiv"
           });
         });
-
+// concerns the drop down
         var attributeName = document.getElementById("attSelect");
         var expressionSign = document.getElementById("signSelect");
         var value = document.getElementById("valSelect");
-
+// this actualyl runs the cleary when clicked
         function doQuery() {
           resultsLayer.removeAll();
           var where = attributeName.value + expressionSign.value + value.value;
@@ -353,7 +355,7 @@
             " Parameter values: ", attributeName.value,
             expressionSign.value, value.value);
         }
-
+// query results
         var resultSymbol = {
           type: "simple-marker",
           size: 10,
