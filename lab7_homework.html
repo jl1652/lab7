@@ -5,12 +5,15 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
   <!-- <title>Full Screen Leaflet Map</title> -->
   <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/> -->
+  <!-- Title of the Map and webspace -->
   <title>2016 Seattle's Bigfoot Ultramarathon Entrants</title>
 
+  <!-- Loads the ESRI CSS and the Javascript below it -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.28/"></script>
 
   <style>
+    /* The page default setting */
     html,
     body {
       padding: 0;
@@ -18,33 +21,39 @@
       height: 100%;
       width: 100%;
     }
+    /* the position and how much space the map takes*/
     #viewDiv {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 60%;
+      height: 80%;
     }
+
+    /*Position and how much space the table takes */
     #tableDiv {
       position: absolute;
       bottom: 0;
-      left: 0;
+      left: 1;
       width: 100%;
-      height: 40%;
+      height: 30%;
     }
+    /* This is the settings for the query button */
     #optionsDiv {
-      background-color: dimgray;
+      background-color: black;
       color: white;
       padding: 10px;
       width: 350px;
     }
+    /* The Esri banner settings */
     .esri-popup .esri-popup-header .esri-title {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bolder;
     }
     .esri-popup .esri-popup-body .esri-popup-content {
       font-size: 14px;
     }
+    /* This is setting pertaining to the dropdown bar we added */
     .dropdown {
       position: absolute;
       top: 15px;
@@ -82,6 +91,8 @@
     .dropdown:focus-within .dropdown-content {
       display: block;
     }
+
+    /* This is the style elments for our title */
     #titleDiv {
       position: absolute;
       top: 15px;
@@ -97,6 +108,8 @@
       font-weight: bold;
       text-align: center;
     }
+
+    /* Style for the copyright stuff at the bottom */
     #copyright {
       position: absolute;
       bottom: calc(40% + 30px);   /* sits on the bottom edge of the map, above the table */
@@ -114,10 +127,11 @@
 </head>
 
 <body>
+  <!-- Containers that the table and view live inside of, title below that -->
   <div id="viewDiv"></div>
   <div id="tableDiv"></div>
   <div id="titleDiv">2016 Seattle Bigfoot Ultramarathon Entrants</div>
-
+  <!-- Specified by the homework assignment this is the links that appear in the top right -->
   <div class="dropdown">
     <button class="dropbtn">Pages</button>
     <div class="dropdown-content">
@@ -255,9 +269,9 @@
           view.ui.add("optionsDiv", "bottom-right");
           document.getElementById("doBtn").addEventListener("click", doQuery);
 
-          //grabs the Bigfoot layer (replaces webmap.layers.getItemAt(0) from the Esri sample)
+          //Uses Bigfoot layer
           BigfootLayer.title = "2016 Bigfoot Entrants";
-
+          //This code below was taken and recycled from: https://developers.arcgis.com/javascript/latest/sample-code/widgets-featuretable-map/
           // Create the feature table
           const featureTable = new FeatureTable({
             view: view, // Required for feature highlight to work
